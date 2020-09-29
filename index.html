@@ -1,0 +1,338 @@
+<!--DOCTYPE html!-->
+<html>
+
+	<!--
+	
+		MIT License
+
+		Engine Copyright (c) 2016 Benjamin R.J. Ehrlich (all rights reserved). 
+		http://www.benergize.com
+
+		Permission is hereby granted, free of charge, to any person obtaining a copy
+		of this software and associated documentation files (the "Software"), to deal
+		in the Software without restriction, including without limitation the rights
+		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+		copies of the Software, and to permit persons to whom the Software is
+		furnished to do so, subject to the following conditions:
+
+		The above copyright notice and this permission notice shall be included in all
+		copies or substantial portions of the Software.
+
+		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+		SOFTWARE.
+	
+	
+	!-->
+	
+
+	<head>
+		<title>Text Adventure</title>
+		<meta http-equiv="Content-Type" charset="UTF-8">
+		
+		<script>
+			//The list where all rooms in the game are stored.
+			roomList = [];
+		</script>
+		
+		<!-- Favicon -->
+			<link rel="icon" type="image/png" sizes="32x32" href="style/favicon-32x32.png">
+		
+		<!-- Lib -->
+			<script src="http://code.jquery.com/jquery-latest.js"></script>
+			<script src="scrs/seedRandom.js"></script>
+		
+		<!-- All the verbs the player can use to talk to the world -->
+			<script src = 'scrs/scr_actions.js'></script>
+		
+		<!-- Joke responses for joke queries -->
+			<script src = 'scrs/scr_jokeAnswers.js'></script>
+		
+		<!-- The array of 'I didn't understand that' responses -->
+			<script src = 'scrs/scr_failureText.js'></script>
+		
+		<!-- Fetch player rank -->
+			<script src = 'scrs/scr_getRank.js'></script>
+		
+		<!-- Various inventory handling functions -->
+			<script src = 'scrs/scr_inventory.js'></script>
+			
+		<!-- Things like 'ask question' and 'enter continues' -->
+			<script src = 'scrs/statusSwitchers.js'></script>
+		
+		<!-- Command line specific things, like CLS and HELP -->
+			<script src = 'scrs/scr_commandLine.js'></script>
+		
+		<!-- Sprites !-->
+			<script src = 'sprs/spr_hiroth.js'></script>
+			
+		<!-- Sample Objects !-->
+			<script src = 'objs/basicObjects.js'></script>
+			<script src = 'objs/foeSpells.js'></script>
+			<script src = 'objs/someEnemies.js'></script>
+			<script src = 'objs/misc.js'></script>
+		
+		<!-- Page Handling -->
+			<script src = 'scrs/pageHandling.js'></script>
+		
+		<!-- Command parsing scripts -->
+			<script src = 'scrs/scrs_parsers/preParse.js'></script>
+			<script src = 'scrs/scrs_parsers/parseInput.js'></script>
+			<script src = 'scrs/scrs_parsers/parseLab.js'></script>
+			<script src = 'scrs/scrs_parsers/parseInventory.js'></script>
+			<script src = 'scrs/scrs_parsers/parseCombat.js'></script>
+			
+			<!-- Parsing Helper Functions -->
+			<script src = 'scrs/scrs_parsers/scrs_parseFunctions/scr_parseFunc_getExits.js'></script>
+			<script src = 'scrs/scrs_parsers/scrs_parseFunctions/scr_parseFunc_goDir.js'></script>
+		
+		<!-- Room and Object Functions !-->
+			<script src = 'scrs/scrs_roomHandling.js'></script>
+			
+		
+		<!-- ROOMS !-->
+		
+			<!-- Sample Room !-->
+				<script src = 'roos/roos_floorM/roo_0.js'></script>
+				<script src = 'roos/roos_floorM/roo_chasm.js'></script>
+			
+		
+		<!-- Labyrinths !-->
+			<script src = 'roos/roos_labyrinths.js'></script>
+			
+			
+			
+		
+		<script>
+		
+		
+			/*
+			**
+			** TODO: Something needs doing.
+			** FIXME: It's broken. Fix it.
+			** DELETEME: This code should be removed in a later version.
+			** HACK: Here be dragons.
+			**
+			*/
+			
+			/*
+			** Status Codes:
+			**	0. Regular play
+			**	1. Combat 
+			**	2. Labyrinth
+			**	3. Y/N
+			**	3.5. Secret Y/N
+			**	4. Get a secret password
+			**	5. 'Press Enter to Continue'
+			**	6. DEV: Enter room number
+			**	7. Get answer from choice
+			**  8. Load from next response
+			*/
+		
+			
+		
+
+			//-----
+			// Begin Player variables
+			//
+			
+				//TODO: Make this one object.
+				
+				var inventory = []; 
+				var spells = [];
+				
+				var hp = 100;
+				var maxhp = 100;
+				
+				var mp = 30;
+				var maxmp = 30;
+				
+				var gold = 0;
+				
+				var status = 0;
+				var x = 1;
+				var y = 14;
+				
+				var lettersFound = [];
+				var score = 0;
+				var dmg = 10;
+				
+				var playerCombatStatus = "none";
+				playerCombatStatusTime = 0;
+			
+			//
+			// End Player variables
+			//-----
+			
+			
+			//Labyrinth variables
+			var currentLab = 0;
+			var labStart = 0;
+			var labEnd = 0;
+			
+			//Room status 
+			var roomObjects = [];
+			var currentRoom = 1;
+			var previousRoom = 1;
+			
+			//Where the complete game transcript is stored
+			var globalTranscript = "";
+			
+			//You know how in CMD and Terminal, you can press up and down to see your previous commands?
+			//This stores those commands.
+			var previousQuery = [""];
+			var queryTicker = previousQuery.length;
+			
+			
+			
+			//-----
+			// Begin janky status variables
+			//
+			
+				//For Yes or No questions
+				var answer = false;
+				var outcome = [];
+				
+				//For password based questions
+				var password = "";
+				var passwordOutcome = "";
+				
+				//What to do after the user presses enter to continue
+				var enterAction = "";
+				
+				
+				//Array of choices and outcomes for when a choice is shown
+				//Element [*][0] is the input, and element [*][1] is the outcome
+				var choicez = ["",function(){}];
+				
+			//
+			// End janky status variables
+			//-----
+			
+			
+			
+			//For font switching
+			var fontTable = [
+				'green_screenregular',
+				'Courier New',
+				'Lucida Console',
+				'ubuntu-mono'
+			];
+			
+			//What font we're currently on
+			var fontTicker = 0;
+			
+			
+			//Global things -- mainly system variabls
+			var global = {
+				debug:true
+			}
+			
+			//Save file information
+			var randomSeed = Math.random() * 100;
+			Math.seedrandom(randomSeed);
+			var saveFile = randomSeed + ",";
+			
+			
+			function doLoad() {
+				
+				doResize();
+				
+				//Print art (see misc.js)
+				echo(ascii);
+				
+				echo("Welcome!");
+				
+				showChoice(
+					[
+						[
+							"New Game",
+							function() {
+								echo("Would you like instructions? (y/n)");
+					
+								askQuestion(
+									function() {
+									
+										//Clear screen
+										cls();
+									
+										//Print intro
+										echo("[Intro Text Goes Here]");
+																								
+										//Wait for 'return'
+										enterContinues(
+											function() {
+											
+												//Clear screen and begin game!
+												cls();
+												
+												echo("So welcome!");
+												echo("Type HELP at any time to hear those instructions again.<br/>");
+												loadRoom("roo_testRoom");
+												status = 0;
+											}
+										);
+									
+										
+									},
+									
+									//No help needed
+									function() {
+										
+										//Clear screen and begin game!
+										cls();
+										echo("Welcome!");
+										echo("Type HELP if you change your mind.<br/>");
+										loadRoom("roo_testRoom");
+										
+									}
+								);
+								return -1;
+							}
+						],
+						[
+							"Load",
+							function() {
+								status = 8;
+								echo("Please enter your save ID:");
+							}
+						],
+						[
+							"Quit",
+							function() {
+									gameOver = true; 
+									echo("Oh, cool, whatever.");
+									echo("shutdown -s -t 2000 -c Shutting Down.");
+									$( "body" ).fadeOut( 2000, function(){})
+							}
+						]
+					]
+				);
+				
+				
+			}
+			
+		</script>
+
+		<link rel = 'stylesheet' type = 'text/css' href = 'style/fonts.css'>
+		<link rel = 'stylesheet' type = 'text/css' href = 'style/stylesheet.css'>
+	</head>
+	
+	
+	<body onresize = doResize(); onload = doLoad();>
+		<br />
+		<div id = 'container'>
+			<noscript>This entire game is Javascript, and it looks like your browser doesn't support that... so you're not gonna be able to play. Sorry.</noscript>
+			<div id = 'biggerPane'>
+                <div id = 'pane'></div>
+                 > <input type = 'text' id = 'fudge' autofocus>
+			</div>
+			<a href = '#' onclick = "submitQuery()"></a>
+		</div>
+		
+	</body>
+</html>

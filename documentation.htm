@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = 'UTF-8'>
+		<title>JMOIN Documentation</title>
+		<style>
+			table,th,td {
+			  border : 1px solid black;
+			  border-collapse: collapse;
+			}
+			th,td {
+			  padding: 5px;
+			}
+			.arg {
+				background:rgb(250,250,220);
+				font-style:normal;
+				font-family:courier;
+				font-size:.9em;
+			}
+			body,html{
+				border:0px;
+				padding:0px;
+				margin:0px;
+				height:100%;
+				width:100%;
+				
+			}
+			#contents {
+				vertical-align:top;display:inline-block;margin-left:0px;height:69%;width:70%;padding:10px;margin:0 auto;border-left:1px inset black;
+			}
+			#chooser {
+				display:inline-block;padding:10px;border-right:1px inset black;width:20%;overflow:scroll;max-height:640px;
+			}
+			#topicExample{
+			font-family:courier;font-size:.8em;
+			}
+		</style>
+		<script
+			  src="https://code.jquery.com/jquery-3.0.0.min.js"
+			  integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="
+			  crossorigin="anonymous"></script>
+		<script>
+
+			documentationArray = [];
+			
+			/*
+			
+			//oooo an easter egg of coming attractions...
+			//a graphical JS game engine????
+			
+			var currentRoom = 0;
+			var rooms = [];
+			
+			function room(name) {
+				this.ref = name;
+				this.instance = [];
+			}
+			
+			function obj(name) {
+				this.ref = name;
+				this.x = -1;
+				this.y = -1;
+				this.sprite_index = "";
+				this.image_speed = 0;
+				this.image_index = 0;
+				this.speed = 0;
+				this.hspeed = 0;
+				this.vspeed = 0;
+				this.direction = 0;
+				this.events = {
+					onCreate:function(){},
+					onDraw:function(){},
+					onCollision:function(){},
+					onStep:function(){},
+					onDestroy:function(){}
+				}
+			}
+			
+			function instance_find(instance) {
+				for(var v = 0; v < rooms[currentRoom].instance.length; v++) {
+					if(rooms[currentRoom].instance[v].ref == instance) {
+						return rooms[v].instance[v];
+					}
+				}
+				return false;
+			}
+			
+			var phil = new obj("phil");
+			phil.direction = 90;
+			
+			var room0 = new room("room0");
+			room0.instance.push(phil);
+			
+			rooms.push(room0);
+			*/
+
+			function loadXMLDoc() {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						createTable(xmlhttp);
+					}
+				};
+				xmlhttp.open("GET", "documentation.xml", true);
+				xmlhttp.send();
+			}
+
+			function createTable(xml) {
+				
+				var xmlDoc = xml.responseXML;
+				var fml = xmlDoc.getElementsByTagName("index");
+
+				for(var v = 0; v < fml.length; v++) { 
+
+					documentationArray[v] = {
+						name:fml[v].getElementsByTagName("name")[0].childNodes[0].nodeValue,
+						type:fml[v].getElementsByTagName("type")[0].childNodes[0].nodeValue,
+						category:fml[v].getElementsByTagName("category")[0].childNodes[0].nodeValue,
+						arguments:fml[v].getElementsByTagName("arguments")[0].childNodes[0].nodeValue,
+						returns:fml[v].getElementsByTagName("returns")[0].childNodes[0].nodeValue,
+						description:fml[v].getElementsByTagName("description")[0].childNodes[0].nodeValue,
+						example:fml[v].getElementsByTagName("example")[0].childNodes[0].nodeValue,
+					};
+					
+					var ul = "";
+					if(documentationArray[v].type == "function") { ul = document.getElementById(documentationArray[v].category); }
+					if(documentationArray[v].type == "variable") { ul = document.getElementById("variableList"); }
+					if(documentationArray[v].type == "topic") { ul = document.getElementById("general"); }
+					
+					var li = document.createElement("li");
+					li.innerHTML = ("<a href = '#"+documentationArray[v].name+"' onclick = 'setTopic(\"" + documentationArray[v].name + "\")'>" + documentationArray[v].name + "</a>");
+					li.setAttribute("id", documentationArray[v].name);
+					ul.appendChild(li);
+				
+
+				}
+				
+				if(window.location.hash) {
+					setTopic((window.location.hash).replace("#",""));
+				} else { setTopic("Welcome"); }
+			
+			}
+			
+			function setTopic(topic) { 
+			
+				for(var v = 0; v < documentationArray.length; v++) {
+					if(documentationArray[v].name == topic) {
+					
+						window.location.hash = documentationArray[v].name;
+						
+						var tpo = documentationArray[v];
+						
+						document.getElementById('topicName').innerHTML = tpo.name;
+						document.getElementById('topicType').innerHTML = tpo.type;
+						
+						if(tpo.type != "function") { document.getElementById('args').style['display'] = "none"; }
+						else { document.getElementById('args').style['display'] = "inline"; }
+						
+						if(tpo.type != "function") { document.getElementById('ret').style['display'] = "none"; }
+						else { document.getElementById('ret').style['display'] = "inline"; }
+						
+						if(tpo.example == "none") { document.getElementById('ex').style['display'] = "none"; }
+						else { document.getElementById('ex').style['display'] = "inline"; }
+						
+						document.getElementById('topicArguments').innerHTML = tpo.arguments;// }
+						//if(tpo.returns != "none") { 
+						document.getElementById('topicReturns').innerHTML = tpo.returns;// }
+						//if(tpo.description != "none") { 
+						
+						//Tag replacements (because you cant use < and > in XML.
+						var desc = tpo.description.replace("[arg]","<i class = 'arg'>").replace("[/arg]","</i>");
+						while(desc.includes("[arg]")) { desc = desc.replace("[arg]","<i class = 'arg'>").replace("[/arg]","</i>"); }
+						while(desc.includes("[p]")) { desc = desc.replace("[p]","<p>").replace("[/p]","</p>"); }
+						while(desc.includes("[ul]")) { desc = desc.replace("[ul]","<ul>").replace("[/ul]","</ul>"); }
+						while(desc.includes("[li]")) { desc = desc.replace("[li]","<li>").replace("[/li]","</li>"); }
+						while(desc.includes("[b]")) { desc = desc.replace("[b]","<b>").replace("[/b]","</b>"); }
+						
+						
+						document.getElementById('topicDescription').innerHTML = desc; //}
+						//if(tpo.example != "none") { 
+						
+						var example = tpo.example.replace("	","&nbsp;&nbsp;&nbsp;&nbsp;");
+						while(example.includes("	")) { example = example.replace("	","&nbsp;&nbsp;&nbsp;&nbsp;"); }
+						while(example.includes("\n")) { example = example.replace("\n","<br/>") }
+						
+						document.getElementById('topicExample').innerHTML = example; 
+						
+					}
+				}
+				
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+				
+			}
+			
+
+		</script>
+	</head>
+	<body onload = loadXMLDoc();>
+
+		<div id = 'container' style = 'width:85%;margin:0 auto;border:1px solid black;'>
+			<div style = 'text-align:center'>
+				<h1>JMOIN Documentation</h1>
+				<small>version 1b. <a href = '#License/Legal' onclick = 'setTopic("License/Legal")'>copyright</a> <a href = 'http://www.benergize.com'>Ben Ehrlich</a></small>
+			</div>
+			<hr/>
+
+			<div id = 'chooser' style = ''>
+				<b>General Topics</b>
+				<br/>
+				<ul id = 'general'></ul>
+				<b>Functions</b>
+				<br/>
+				<br/>
+				
+				<div id = 'functionList' style = 'padding-left:2em;'>
+				
+					System
+					<ul id = 'system'></ul>
+					Command line
+					<ul id = 'commandLine'></ul>
+					
+					Gameplay
+					<ul id = 'gameplay'></ul>
+				</div>
+				
+				<b>Variables</b>
+				<ul id = 'variableList'></ul>
+			</div>
+			
+			<div id = 'contents' style = ''>
+			
+				<h2 id = 'topicName'>Welcome</h2>
+				Type: <i id = 'topicType'>About</i>
+				<br/>
+				<br/>
+
+				<div id = 'args'>
+					<b>Arguments:</b><br/>
+					<span id = 'topicArguments'>none</span>
+					<br/>
+					<br/>
+				</div>
+
+				<div id = 'ret'>
+					<b>Returns</b><br/>
+					<span id = 'topicReturns'>none</span>
+					<br/>
+					<br/>
+				</div>
+				
+				<div id = 'desc'>
+					<b>Description</b>
+					<p id = 'topicDescription'>This is the documentation for JMOIN, a JavaScript text adventurer game engine. Click a topic on the left hand side for information about what it does and how it works. For additional assistance, contact <a href = 'mailto:bensaysstuff@gmail.com'>Ben</a>.</p>
+					<br/>
+				</div>
+
+				<div id = 'ex'>
+					<b>Example:</b>
+					<div id = 'topicExample' style = ''></div>
+				</div>
+				
+				<noscript>
+					Hi, this documentation is powered by JavaScript, and it looks like your browser doesn't support that. You can view the unformatted information <a href = 'documentation.xml'>here</a>.
+				</noscript>
+			</div>
+			
+			<br style = 'clear:both'>
+		
+		</div>
+		
+	</body>
+</html>

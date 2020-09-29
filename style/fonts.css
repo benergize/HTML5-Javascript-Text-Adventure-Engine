@@ -1,0 +1,32 @@
+
+
+/*__________________________________________________________________________________
+//
+//	FILENAME: fonts.css
+//	AUTHOR: Ben Ehrlich
+//	PURPOSE: Loads necesary fonts.
+//
+//
+*/
+
+
+@font-face {
+    font-family: 'green_screenregular';
+    src: url('fons/fon_greenscr/greenscr-webfont.eot');
+    src: url('fons/fon_greenscr/greenscr-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fons/fon_greenscr/greenscr-webfont.woff2') format('woff2'),
+         url('fons/fon_greenscr/greenscr-webfont.woff') format('woff'),
+         url('fons/fon_greenscr/greenscr-webfont.ttf') format('truetype'),
+         url('fons/fon_greenscr/greenscr-webfont.svg#green_screenregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'ubuntu-mono';
+    src: url('fons/fon_greenscr/ubuntu-mono.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}

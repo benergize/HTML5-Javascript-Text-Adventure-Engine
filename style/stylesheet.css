@@ -1,0 +1,53 @@
+
+
+/*__________________________________________________________________________________
+//
+//	FILENAME: stylesheet.css
+//	AUTHOR: Ben Ehrlich
+//	PURPOSE: Formats the command line.
+//
+//
+*/
+
+body,html,input {
+	background: black;
+	color: lightgreen;
+	font-family: 'green_screenregular','Courier New';
+	font-size: 22px;
+	line-height:1.2em;
+	
+}
+
+#pane {
+	background: black;
+	color: lightgreen;
+	border: 0px;
+	padding: 5px;
+}
+
+#biggerPane {
+	overflow-y: hidden;
+	overflow-x: hidden;
+	width: 95%;
+	height:95%;
+}
+
+#container{
+	width: 100%;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+input {
+	background: black;
+	color: lightgreen;
+	border: 0px;
+	width: 90%;
+	height: 2em;
+	font-size: 20px;
+	outline-width: 0;
+}
+
+a {
+	color:white;
+}

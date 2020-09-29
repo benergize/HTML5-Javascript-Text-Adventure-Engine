@@ -1,0 +1,1093 @@
+
+<documentation>
+
+
+	<index>
+		<name>Welcome</name>
+		<type>topic</type>
+		<category>none</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>This is the documentation for JMOIN (a JavaScript Text Adventure game engine) version 1b. To the left are help topics, and references to the inner workings of the engine, which you can click to view. For further assistance, bug reports and feature requests, contact me using the information below.</description>
+		<example>
+			Contact: 
+			
+			Email: bensaysstuff@gmail.com
+			Web: http://www.benergize.com
+		</example>
+	</index>
+
+	<index>
+		<name>askQuestion</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>function yesAction, function noAction</arguments>
+		<returns>none</returns>
+		<description>Offers a (Y/N) prompt, performing the [arg]yesAction[/arg] or [arg]noAction[/arg] depending on the user's response. The prompt will continue displaying until the user has entered either 'yes' or 'no'.</description>
+		<example>
+			askQuestion(
+				function() {
+					echo("User has selected 'yes'");
+				},
+				function() {
+					echo("User has selected 'no'");
+				}
+			);
+		</example>
+	</index>
+
+	<index>
+		<name>askSecretly</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>function yesAction, function noAction</arguments>
+		<returns>none</returns>
+		<description>Checks next user response for a yes or no, performing the [arg]yesAction[/arg] or [arg]noAction[/arg] depending on the user's next input. This function checks for a 'yes' or 'no' but does not show a prompt.</description>
+		<example>
+			askSecretly(
+				function() {
+					echo("User has selected 'yes'");
+				},
+				function() {
+					echo("User has selected 'no'");
+				}
+			);
+		</example>
+	</index>
+
+	<index>
+		<name>getPassword</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String password, function outcome</arguments>
+		<returns>none</returns>
+		<description>Compares user's next response with a given [arg]password[/arg] String. If the input and [arg]password[/arg] match, executes [arg]outcome[/arg]. Echoes "incorrect" if given response does not match [arg]password[/arg].</description>
+		<example>
+			getPassword(
+				"12345",
+				function() {
+					echo("Correct password entered.");
+				}
+			);
+		</example>
+	</index>
+
+	<index>
+		<name>showChoice</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>[[String choice 0, function outcome 0], [String choice 1, function outcome 1], [etc]]</arguments>
+		<returns>none</returns>
+		<description>Shows a numbered list of options the user can select from. The list is populated from the arguments, a two dimensional array. Position *,0 is the text to display for the option, and *,1 is the function to execute if the player selects that choice.</description>
+		<example>
+			showChoice(
+				[
+					[
+						"Choice 1",
+						function() {
+							echo("You have selected choice 1.");
+						}
+					],
+					[
+						"Choice 2",
+						function() {
+							echo("You have selected choice 1.");
+						}
+					]
+				]
+			);
+		</example>
+	</index>
+
+	<index>
+		<name>enterContinues</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>function continue</arguments>
+		<returns>none</returns>
+		<description>Displays a prompt with text 'PRESS ENTER TO CONTINUE,' and then performs actions in argument [arg]continue[/arg] after the user has pressed enter.</description>
+		<example>
+			enterContinues(
+				function() {
+					echo("You have pressed enter.");
+				}
+			);
+		</example>
+	</index>
+
+	<index>
+		<name>submitQuery</name>
+		<type>function</type>
+		<category>system</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>Sends user input from the input box to preParse(), printing out the input and the response.</description>
+		<example>none</example>
+	</index>
+
+	<index>
+		<name>doResize</name>
+		<type>function</type>
+		<category>system</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>Resizes buffer text to fit the window. Executed on page load and on page resize.</description>
+		<example>none</example>
+	</index>
+
+	<index>
+		<name>interactWords</name>
+		<type>variable</type>
+		<category>gameplay</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>Variable containing all verbs player can use to interact with the world.</description>
+		<example>none</example>
+	</index>
+
+	<index>
+		<name>help</name>
+		<type>function</type>
+		<category>commandLine</category>
+		<arguments>none</arguments>
+		<returns>String helpText</returns>
+		<description>Clears the screen and returns gameplay instructions.</description>
+		<example>
+			echo(help());
+		</example>
+	</index>
+
+	<index>
+		<name>about</name>
+		<type>function</type>
+		<category>commandLine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>Prints 'about' text, generally information about the author/version.</description>
+		<example>
+			about();
+		</example>
+	</index>
+
+	<index>
+		<name>tscpt</name>
+		<type>function</type>
+		<category>commandLine</category>
+		<arguments>none</arguments>
+		<returns>String link</returns>
+		<description>Prints a link to a formatted game transcript (all entered queries and responses).</description>
+		<example>
+			tscpt();
+		</example>
+	</index>
+
+	<index>
+		<name>save</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>Sends an AJAX request to loadGame.php, printing out the user's save filename if successful. Prints an error on failure. For more information, see loadGame.php.</description>
+		<example>
+			save();
+		</example>
+	</index>
+
+	<index>
+		<name>load</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String saveFile</arguments>
+		<returns>none</returns>
+		<description>Takes a user's save filename and attempts to load the matching save from a database by re-running all user inputs through preParse(). Prints '(Loaded.)' on success, or error information on failure.</description>
+		<example>
+			load("1.56412,1,y,,,go north,go west,go north,take rock,");
+		</example>
+	</index>
+
+	<index>
+		<name>cls</name>
+		<type>function</type>
+		<category>commandLine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>Clears the screen buffer by setting the innerHTML value of the 'pane' div to "".</description>
+		<example>
+			cls();
+		</example>
+	</index>
+
+	<index>
+		<name>echo</name>
+		<type>function</type>
+		<category>commandLine</category>
+		<arguments>String text</arguments>
+		<returns>none</returns>
+		<description>Prints [arg]text[/arg] to the buffer by appending it to the 'pane' element.</description>
+		<example>
+			echo("Text to write to buffer.");
+		</example>
+	</index>
+
+	<index>
+		<name>changeFont</name>
+		<type>function</type>
+		<category>commandLine</category>
+		<arguments>none</arguments>
+		<returns>"Font change."</returns>
+		<description>Changes the font of the screen buffer.</description>
+		<example>
+			changeFont();
+		</example>
+	</index>
+
+	<index>
+		<name>failure</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>none</arguments>
+		<returns>String errorText</returns>
+		<description>Returns a random 'error response' from a set list of 'input not understood' responses.</description>
+		<example>
+			echo(failure());
+		</example>
+	</index>
+
+	<index>
+		<name>invRemove</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String itemName</arguments>
+		<returns>Boolean true on success, false on failure</returns>
+		<description>Removes item named [arg]itemName[/arg] from the player's inventory.</description>
+		<example>
+			invRemove("lamp");
+		</example>
+	</index>
+
+	<index>
+		<name>invCheck</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String itemName</arguments>
+		<returns>Boolean true if item found, false if not</returns>
+		<description>Checks if item named [arg]itemName[/arg] exists in the player's inventory</description>
+		<example>
+			if(invCheck("wrench")) { echo("You have the wrench."); }
+			else { echo("You do not have the wrench"); }
+		</example>
+	</index>
+
+	<index>
+		<name>takeInventory</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>none</arguments>
+		<returns>String itemList</returns>
+		<description>Returns a list of items in the player's inventory, or "There's nothing in your inventory" if no items are found.</description>
+		<example>
+			echo(takeInventory());
+		</example>
+	</index>
+
+	<index>
+		<name>findInInventory</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String itemName</arguments>
+		<returns>Object item if found, or Boolean false if not</returns>
+		<description>Returns an object named [arg]itemName[/arg] from the player's inventory, or false if the item is not found.</description>
+		<example>
+			findInInventory("lamp").lit = false;
+		</example>
+	</index>
+
+	<index>
+		<name>jokeAnswers</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String input</arguments>
+		<returns>String jokeResponse</returns>
+		<description>Checks [arg]input[/arg] against a series of possible joke responses, and returns the answer to the joke if a match is found.</description>
+		<example>
+			echo(jokeAnswers("pc load letter"));
+		</example>
+	</index>
+
+	<index>
+		<name>combatMode</name>
+		<type>variable</type>
+		<category>gameplay</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>Variable corrosponding to what menu we're currently in during a combat situation.</description>
+		<example>none</example>
+	</index>
+
+	<index>
+		<name>combatSelect</name>
+		<type>variable</type>
+		<category>gameplay</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>Not sure.</description>
+		<example>none</example>
+	</index>
+
+	<index>
+		<name>parseInput</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String input</arguments>
+		<returns>String response</returns>
+		<description>Input parser for main dungeon navigation. Handles navigation and interaction queries as well as inventory checks, spell checks, and status checks.</description>
+		<example>
+			parseInput("look around");
+		</example>
+	</index>
+
+	<index>
+		<name>parseInventory</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String input</arguments>
+		<returns>String response</returns>
+		<description>Handles requests to look at or manipulate items in the players inventory.</description>
+		<example>
+			parseInventory("drop egg");
+		</example>
+	</index>
+
+	<index>
+		<name>startLab</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>Int x, Int y, Int labyrinthNumber, function entrance, function exit</arguments>
+		<returns>none</returns>
+		<description>Initiates player navigation of a labyrinth, specifying where they start with arguments [arg]x[/arg] and [arg]y[/arg], what labyrinth they're navigating with argument [arg]labyrinthNumber[/arg], and what should happen when they reach the entrance/exit of the labyrinth via argument [arg]entrance[/arg] and argument [arg]exit[/arg]. Also prints introductory text.</description>
+		<example>
+			startLab(3, 1, 0, function() { loadRoom("roo_main"); },function() { loadRoom("roo_exit"); });
+		</example>
+	</index>
+
+	<index>
+		<name>parseLab</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String input</arguments>
+		<returns>String response</returns>
+		<description>Handles user [arg]input[/arg] from within a labyrinth, handling navigation via the cardinal directions. Checks for walls, dead ends, entrances, and exits.</description>
+		<example>
+			parseLab("north");
+		</example>
+	</index>
+
+	<index>
+		<name>preParse</name>
+		<type>function</type>
+		<category>system</category>
+		<arguments>String input</arguments>
+		<returns>String response/Object response/Int response/function response/none</returns>
+		<description>Sends user [arg]input[/arg] to an appropriate parser based on current game status. Also checks for some debug commands and commandline queries.</description>
+		<example>
+			preParse("go north");
+		</example>
+	</index>
+
+	<index>
+		<name>parseFunc_getExits</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>none</arguments>
+		<returns>String exits</returns>
+		<description>Returns a formatted list of exits in the current room, or "There are no exits!" if there are no exits.</description>
+		<example>
+			echo(parseFunc_getExits());
+		</example>
+	</index>
+
+	<index>
+		<name>parseFunc_goDir</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String input</arguments>
+		<returns>descriptionString goDir</returns>
+		<description>Checks if provided [arg]input[/arg] is a cardinal direction (includding up/down), sets variable cD (cardinal direction) to true, and returns a formatted direction query. Returns false if no directional request was found.</description>
+		<example>
+			parseFun_goDir("n");
+		</example>
+	</index>
+
+	<index>
+		<name>getRoomNumberByName</name>
+		<type>function</type>
+		<category>system</category>
+		<arguments>String roomName</arguments>
+		<returns>Int roomNumber/false</returns>
+		<description>Gets a room's position in variable 'roomList' from a provided [arg]roomName[/arg].</description>
+		<example>
+			roomNumber = getRoomNumberByName("roo_chasm");
+		</example>
+	</index>
+
+	<index>
+		<name>loadRoom</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String roomName/Int roomNumber</arguments>
+		<returns>none</returns>
+		<description>Sets the current room to room specified in argument [arg]roomName[/arg]/[arg]roomNumber[/arg], loading its objects into roomObjects and executing or printing its intro.</description>
+		<example>
+			loadRoom("roo_chasm");
+		</example>
+	</index>
+
+	<index>
+		<name>checkRoom</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String roomName/Int roomNumber, String objectName</arguments>
+		<returns>Boolean wasFound</returns>
+		<description>Checks if object specified via argument [arg]objectName[/arg] is found in room [arg]roomName[/arg]/[arg]roomNumber[/arg]. Returns true if object is found, and false if it is not.</description>
+		<example>
+			if(checkRoom("roo_steamRoom","wrench")) { echo("The wrench is in the steam room."); }
+		</example>
+	</index>
+
+	<index>
+		<name>findObject</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String roomName/Int roomNumber, String objectName</arguments>
+		<returns>Object object/Boolean notFound</returns>
+		<description>Finds and returns an [arg]object[/arg] in a specified room, [arg]roomName[/arg]/[arg]roomNumber[/arg]. If the object is not found, returns false.</description>
+		<example>
+			findObject(currentRoom,"obj_brick").smell = "The brick smells funny now.";
+		</example>
+	</index>
+
+	<index>
+		<name>removeObject</name>
+		<type>function</type>
+		<category>gameplay</category>
+		<arguments>String roomName/Int roomNumber, String objectName</arguments>
+		<returns>Boolean success</returns>
+		<description>Finds and removes object [arg]objectName[/arg] in specified room [arg]roomName[/arg]/[arg]roomNumber[/arg]. If succesful, returns true. If object wasn't found or couldn't be removed for some reason, returns false.</description>
+		<example>
+			removeObject(currentRoom,"brick");
+		</example>
+	</index>
+
+	<index>
+		<name>findRoom</name>
+		<type>function</type>
+		<category>system</category>
+		<arguments>String roomName</arguments>
+		<returns>Object room</returns>
+		<description>Returns the object of a room from String of the room name, [arg]roomName[/arg].</description>
+		<example>
+			findRoom("roo_chasm").roomObjects.push(obj_brick);
+		</example>
+	</index>
+	
+	<index>
+		<name>HTML Page Structure</name>
+		<type>topic</type>
+		<category>engine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			&lt;p&gt;The game window is designed to look like the interface of an old computer terminal or a command prompt. To create this appearance, this window is divided into several divs, sized using JS and CSS. Bear in mind all divs and elements may be and in some cases will definitely be renamed in future releases.&lt;/p&gt;
+			&lt;p&gt;All components of the interface are housed in a div IDd [arg]container[/arg]. The [arg]container[/arg] div has a width of 90%, which means it increases in size with the window. Div [arg]container[/arg] immediately contains a NoScript tag, which will inform the user that the game will not function without JS.&lt;/p&gt;
+			&lt;p&gt;A div IDd [arg]biggerPane[/arg] has a width and height of 90% specified, and so will also resize with the window. The biggerPane div houses [arg]pane[/arg] and [arg]fudge[/arg].
+			The div IDd [arg]pane[/arg] emulates a command line screen buffer, housing all returned text and previous inputs.&lt;/p&gt;
+			&lt;p&gt;User input is entered via an input element IDd [arg]fudge[/arg]. Div [arg]fudge[/arg] automatically takes focus when the page loads.&lt;/p&gt;
+		</description>
+		<example>none</example>
+	</index>
+	
+	<index>
+		<name>Input Handling</name>
+		<type>topic</type>
+		<category>engine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			&lt;p&gt;A user inputs commands/queries via the [arg]fudge[/arg] input. Emulating command lines, to send the input the user presses enter. The enter/return key input is captured by a JQuery keydown event. When this keydown event is triggered, submitQuery() is called.&lt;/p&gt;
+			&lt;p&gt;The submitQuery function gets the contents of [arg]fudge[/arg] and stores it in variable [arg]eval[/arg]. The variable is then stripped of illegal characters that might interfere with gameplay. The [arg]eval[/arg] variable is then echoed (a function that simply prints to the buffer) to the command line with a preceeding 'greater than' symbol, indicating that it is a user input and not a game response. The user input is then set to the preParse function.&lt;/p&gt;
+			&lt;p&gt;The preParse function is responsible for routing the input to an appropriate higher level parser, depending on the game status. Certain statuses do not parse in separate functions, but are processed directly for preParse().&lt;/p&gt;
+		</description>
+		<example>none</example>
+	</index>
+	
+	<index>
+		<name>Creating Objects</name>
+		<type>topic</type>
+		<category>engine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			[p]Objects in the engine are just regular JavaScript objects with a set of specific properties referenced by the parsing scripts. The most important properties of an object are its [arg]name[/arg] and its [arg]pName[/arg]. The object's [arg]name[/arg] is how it is referenced internally by the game. An objects name does not have to be unique to the whole game, but must be unique to the room--so, you could have two objects with the [arg]name[/arg] "rock," but you could only have one per room. An objects [arg]name[/arg] is how a player will reference the object in queries. The [arg]name[/arg] variable can only be one word. An object's [arg]pName[/arg] is what shows up as in the "look around" query. In a room with an object with the [arg]pName[/arg] "box of rocks", the "look around" query will read like the follwing: "There's a box of rocks." Remember that the player references objects by their [arg]name[/arg] and not their [arg]pName[/arg]. Players won't necesarily thing to say, for example, "pick up rocks" versus "pick up box," and to accomadate for this, we use the varialbe [arg]aliases[/arg]. Variable [arg]aliases[/arg] is an array containing various names the player can mention to interact with an object. To allow the player to interact more easily with the 'box or rocks,' we would set the [arg]aliases[/arg] variable to [arg]["box"][/arg]. You can have any number of [arg]aliases[/arg] in the the array, just ensure that there is no overlap with other objects in the room. In cases of keys, it sometimes makes sense to set the object [arg]name[/arg] to something totally unique like, 'keyToChasm,' and to make one of its [arg]aliases[/arg] 'key'. This way, the player can interact with it normally, and you can reference it uniquely.[/p] 
+			
+			[p]Once the player can interact with an object by name, you'll need to set property responses. For a complete list of properties, see scr_actions.js. Property variables are equivilent to the first quotated string in the interact word array, so, to set an object's sight ("look at ___") response, you'd set the [arg]sight[/arg] property of an object to the desired response String or function. A string will be printed, and a function will be executed.[/p]
+			
+			[p]It is suggested that objects that are used in only one room be created in the file for that room, while common objects like bottles and potions, or fountains of health, be created in separate files. Best practice for object naming conventions is [arg]obj_roomNameOrNumber_objectName[/arg] (this prevents overlapping object variable names).[/p]
+			
+			[p]For information on actually adding objects to rooms, see 'Adding Rooms.'[/p]  
+		</description>
+		<example>
+			obj_testingHall_rocks = {
+				name:"rock",
+				aliases:["rocks","box"],
+				pName:"box of rocks",
+				sight:"You look at the box of rocks. This response will be printed.",
+				touch:function() {
+					//Responses can also be functions
+					score += 20;
+					
+					echo("You touch the rock and get twenty points. Wow!");
+					
+					//Press enter to continue after this riveting moment
+					enterContinues();
+				}
+			};
+			
+			obj_testingHall_key = {
+				name:"keyToChasm",
+				aliases:["key"],
+				pName:"key",
+				sight:"putting the room name between 'obj' and 'key' means that if you don't end up with clashing object names, like two 'obj_key's in separate rooms.",
+				take:function(){
+					echo("You take the key.");
+					inventory.push(obj_testingHall_key);
+				},
+				use:function() {
+					if(roomList[currentRoom].name == "roo_chasm") {
+						echo("You unlock the secret door in the chasm--your key breaking in the lock!");
+						invRemove("keyToChasm");
+					}
+				}
+			};
+		</example>
+	</index>
+	
+	<index>
+		<name>Adding Rooms</name>
+		<type>topic</type>
+		<category>game</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			&lt;p&gt;The game is all JS, so rooms can be added anywhere in the code, but for the sake of keeping things tidy, it's recomended that rooms be created in their own files, e.g., a room called 'dungeon' should be in the 'roos' directory under the name 'roo_dungeon.js'.&lt;/p&gt;
+			&lt;p&gt;A room is a JS object which consists of the following properties: [arg]name[/arg], [arg]pName[/arg], [arg]intro[/arg], and [arg]roomObjects[/arg]. Property [arg]name[/arg] is the variable by which the room is referenced--it is never actually seen by the player. [arg]name[/arg] is used in functions like [arg]checkRoom[/arg] to specify what room to check. [arg]name[/arg] must be unique to a given room. [arg]pName[/arg] is the name that is actually displayed to players. Variable [arg]intro[/arg] is what is printed or executed when a room is loaded. It can either be a function or a String. A String will be printed, while a function will be executed.&lt;/p&gt;
+			&lt;p&gt;Variable [arg]roomList[/arg] is populated with objects from the room. For information about object construction, see topic 'Adding Objects'.&lt;/p&gt;
+			For a room to be accesible to the game, it must be added to the roomList array. The easiest was to do this is to add [arg]roomList.push(roo_roomObject);[/arg] to the end of your room's file.&lt;/p&gt;
+		</description>
+		<example>
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//	Filename: roo_0.js
+//	Author: Ben Ehrlich
+//	Desc: A sample room to show off how rooms are put together.
+//
+//
+
+
+//Create a door using the door constructor.
+var obj_0_north = new door("north",1);
+
+
+var obj_0_table = {
+	name:"table",
+	pName:"mahogany table",
+	sight:"A beautifully crafted table.",
+	touch:"The wood is smooth and well sanded.",
+	taste:"Tastes a little dusty.",
+	smell:"The air is clean and crisp, and smells slightly of pine."
+}
+
+
+var obj_0_rock = {  
+	name:"rock",
+	aliases:["worthless","stone"],
+	pName:"worthless rock",
+	sight:"It's a super useless rock. It's not bad or anything, it just doesn't do anything.",
+	smell:"It smells like a rock that's just a regular rock and doesn't do anything.",
+	taste:"It tastes like a rock that doesn't do anything. It's just a rock.",
+	touch:"You touch the useless rock. It feels like a rock... that's pretty useless.",
+	take:function(){
+		echo("You take the useless rock that's just a rock and isn't going to help you in any way throughout the game, but is just, in fact, a rock.");
+		inventory.push(obj_0_rock);
+		removeObject("roo_testRoom","rock");
+		score += 15;
+	}
+}
+
+
+var room_0 = {
+	name:"roo_testRoom",
+	pName:"Test Room",
+	intro:"You're in a testing room. There's little to see here, but check the source for insight into how rooms work.",
+	roomObjects: [
+		obj_0_north,
+		obj_0_table,
+		obj_0_rock
+	]
+}
+
+//Add this room to the room list array
+roomList.push(room_0);
+		</example>
+	</index>
+	
+	<index>
+		<name>Saving/Loading</name>
+		<type>topic</type>
+		<category>system</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			[p]&lt;i&gt;the information below is accurate but incoherent. this is gonna get redone at some point when i'm less tired. if this doesn't make sense and you need to figure out saving and loading, look at functions save() and load() in scr_commandLine and check out loadGame.php. sorry.&lt;/i&gt;[/p]
+			[p]Saving and loading are the only features that are not purely JavaScript. Saving and loading functionallity utilizes mySQL and PHP. The system works as follows:[/p]
+			[p]At the start of the game, a random number is generated--this serves as a seed for all further random number generation in the game. This allows for all games to have RNG but to also be repeatable. The random number is stored to a variable called [arg]saveFile[/arg] for use later. Every input the user passes via the [arg]fudge[/arg] input element is stored in the [arg]saveFile[/arg] variable, separated by a comma.[/p]
+			[p]When the player types 'save' into the command line, the save() function is called (found in scr_commandLine.js). Function save() sends an AJAX request to loadGame.php (loadGame.php handles both saving and loading). The request has a GET variable of [arg]action[/arg] set to 'save,' and sends a POST variable [arg]data[/arg] containing the JS variable [arg]saveFile[/arg]. The PHP file attempts to INSERT the data recieved into table [arg]saves[/arg] putting the save data into row [arg]data[/arg]. The save filename is returned to the user via an echo. The filename is actually just 5 random digits from an MD5 of a random number, followed by its auto incremented position ([arg]pos[/arg]) in the mySQL table.[/p]
+			[p]Loading is actually very simple. The user is given an option at the begining of the game to load. If the user takes this option, their prompted to enter their save filename. Another AJAX request is sent to loadGame.php by function load() containing the user's filename as the POST [arg]data[/arg]. Returned is the user's game transcript. The first thing that happens then is that the seed is set to the seed from the last game so that all random numbers generated sync up. Next, the save data is then run through function preParse() and echoed, as though the game is being played again. On success, the text "loaded" is displayed.[/p]
+			
+		</description>
+		<example>
+			
+			//Below is the SQL command to create the saves table
+			
+			CREATE TABLE IF NOT EXISTS `saves` (
+			  `pos` int(11) NOT NULL AUTO_INCREMENT,
+			  `hash` text NOT NULL,
+			  `tstamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			  `data` longtext NOT NULL,
+			  PRIMARY KEY (`pos`),
+			  UNIQUE KEY `pos` (`pos`)
+			) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=71 ;
+
+
+		</example>
+	</index>
+	
+	<index>
+		<name>Issues/Todo</name>
+		<type>topic</type>
+		<category>general</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			[p]There's a variety of bugs and issues I'm aware of but do not have the time or energy to fix in this version. Please do not send bug reports on these issues, because I know they're there and I'm going to fix them when I have time. Below are also features I need to add[/p]
+
+			[b]Bugs/Issues:[/b]
+			[ul]
+				[li]Rank fetches die when above maximum score, and this sometimes breaks the game.[/li]
+				[li]No error checking/boolean returns on some helper functions.[/li]
+			[/ul]
+			
+			[b]Todo[/b]
+			[ul]
+				[li]Fix parseCombat.js so it's no a freaking nightmare.[/li] 
+				[li]Automatically populate switch statements containing action words in parseInput and parseInventory (or whatever that function is called) from actionWords.[/li]
+				[li]Add optional &lt;a href = 'http://www.benergize.com/assets/img/arena.png'&gt;2D arena style combat mode&lt;/a&gt;.[/li]
+				[li]Add events in labyrinths[/li]
+				[li]Redo player spell system so that it doesn't use the name/pName HACK.[/li]
+				[li]Add a butt-ton of combat statuses (ie frozen, on fire, etc) so that you don't need to muck around in the heck-hole that is parseCombat.js to create function based spells.[/li]
+				[li]Standardize this documentation (fix typos, be more rigid with when to and not to highlight variables and functions)
+			[/ul]
+		</description>
+		<example>none</example>
+	</index>
+	
+	<index>
+		<name>License/Legal</name>
+		<type>topic</type>
+		<category>engine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			&lt;p&gt;All code, with the exception of the JQuery Library and 'Seed Random' (see seedRandom.js or credits for license) were written by Ben Ehrlich and are released under the MIT license (see below under 'Example'). Credit to Gabe Ehrlich for coming up with a much better way to save the game than I thought of. &lt;/p&gt;
+			
+
+			
+		</description>
+		<example>
+		
+			Copyright (c) 2016 Ben Ehrlich
+			
+			Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+			The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+			THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+		</example>
+	</index>
+	
+	<index>
+		<name>inventory</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Array of all objects and spells in posession of the player.
+		</description>
+		<example>
+		
+			//You can of course write objects directly to the inventory
+			inventory[0] = {
+				name:"obj_example",
+				pName:"sample item",
+				sight:"This is the response given when the player looks at the item.",
+				smell:"Smells of sampling"
+			};
+			
+			//But it makes more sense to create objects, and then add them.
+			obj_example = {
+				name:"obj_example",
+				pName:"sample item",
+				sight:"This is the response given when the player looks at the item.",
+				smell:"Smells of sampling"
+			};
+			
+			inventory.push(obj_example);
+		</example>
+	</index>
+	
+	<index>
+		<name>hp</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Player's health points. Used to track just how alive they are.
+		</description>
+		<example>
+			if(hp > 100) {
+				echo("You're at full health!");
+			}
+			else if(hp == 0) {
+				You're dead.
+			}
+		</example>
+	</index>
+	
+	<index>
+		<name>maxHp</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Player's max health points. If the player heals somewhere and their hp goes over the maximum, it will be lowered back to the maximum.
+		</description>
+		<example>
+			if(hp > maxHp) { hp = maxHp; }
+		</example>
+	</index>
+	
+	<index>
+		<name>mp</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Player's mana points. Used to track how much magic they have available.
+		</description>
+		<example>
+			if(mp > 100) {
+				echo("You have a lot of mana!");
+			}
+		</example>
+	</index>
+	
+	<index>
+		<name>maxMp</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Player's max mana points. If the player heals somewhere and their hp goes over the maximum, it will be lowered back to the maximum.
+		</description>
+		<example>
+			if(mp > maxMp) { mp = maxMp; }
+		</example>
+	</index>
+	
+	<index>
+		<name>gold</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Tracks amount of gold player is currently carrying.
+		</description>
+		<example>
+			if(gold > 1000000) {
+				echo("You're rich!");
+			}
+		</example>
+	</index>
+	
+	<index>
+		<name>currentRoom</name>
+		<type>variable</type>
+		<category>game</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			The room number that the player is currently in. Corrosponds to the room's position in roomList.
+		</description>
+		<example>
+			if(currentRoom == 0) { 
+				echo("You're in the opening room."); 
+			}
+		</example>
+	</index>
+	
+	<index>
+		<name>previousRoom</name>
+		<type>variable</type>
+		<category>game</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			The last room the player was in. Set by loadRoom().
+		</description>
+		<example>
+			if(previousRoom == 0) { 
+				echo("The last room you were in was the opening room."); 
+			}
+		</example>
+	</index>
+	
+	<index>
+		<name>roomObjects</name>
+		<type>variable</type>
+		<category>game</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Deprecated. Acts as a pointer to the current rooms index of roomObjects, meaning roomList[currentRoom].roomObjects. Use roomList[currentRoom].roomObjects instead, or use an associated function.
+		</description>
+		<example>
+			roomObjects[0] = obj_rock;
+		</example>
+	</index>
+	
+	<index>
+		<name>status</name>
+		<type>variable</type>
+		<category>game</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Controls with parser user input is handed to. Status is typically changed using an initator function, such as enterContinues();
+		</description>
+		<example>
+			/*
+			** Status Codes:
+			**	0. Regular play
+			**	1. Combat 
+			**	2. Labyrinth
+			**	3. Y/N
+			**	3.5. Secret Y/N
+			**	4. Get a secret password
+			**	5. 'Press Enter to Continue'
+			**	6. DEV: Enter room number
+			**	7. Get answer from choice
+			**  8. Load from next response
+			*/
+			
+			//Dungeon navigation/regular play
+			status = 0;
+		</example>
+	</index>
+	
+	<index>
+		<name>dmg</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			How much damage a player does with a standard attack in combat. Full attack damage formular is [arg](dmg / 2) + ((Math.random() * dmg) / 2)[/arg].
+		</description>
+		<example>
+			//Player will do around 16 damage
+			dmg = 16;
+		</example>
+	</index>
+	
+	<index>
+		<name>score</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			The player's score in the game. Should be incremented when the player solves puzzles. Used to give the player a rank at the end of the game.
+		</description>
+		<example>
+			if(puzzleSolved) {
+				score += 30;
+				echo("great job!");
+			}
+		</example>
+	</index>
+	
+	<index>
+		<name>dmg</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			How much damage a player does with a standard attack in combat. Full attack damage formular is [arg](dmg / 2) + ((Math.random() * dmg) / 2)[/arg].
+		</description>
+		<example>
+			//Player will do around 16 damage
+			dmg = 16;
+		</example>
+	</index>
+	
+	<index>
+		<name>x</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			A player's x position in a maze/labyrinth.
+		</description>
+		<example>
+			//Player's x coordinate in maze is 16.
+			x = 16;
+		</example>
+	</index>
+	
+	<index>
+		<name>y</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			A player's y position in a maze/labyrinth.
+		</description>
+		<example>
+			//Player's y coordinate in maze is 16.
+			y= 16;
+		</example>
+	</index>
+	
+	<index>
+		<name>playerCombatStatus</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			A player's condition in combat. 
+		</description>
+		<example>
+			//The player will be unable to move
+			playerCombatStatus = "frozen";
+		</example>
+	</index>
+	
+	<index>
+		<name>playerCombatStatusTime</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			How many more turns a player will endure their current status.
+		</description>
+		<example>
+			//Player will continue the effects of their current combat status for 5 turns
+			playerCombatStatusTime = 5;
+		</example>
+	</index>
+	
+	<index>
+		<name>previousQuery</name>
+		<type>variable</type>
+		<category>commandLine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			An array of strings containing all previous user queries. Used to populate the up and down arrow reactions in the command line.
+		</description>
+		<example>
+			previousQuery[0] = lastInput;
+		</example>
+	</index>
+	
+	<index>
+		<name>playerCombatStatusTime</name>
+		<type>variable</type>
+		<category>player</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			How many more turns a player will endure their current status.
+		</description>
+		<example>
+			//Player will continue the effects of their current combat status for 5 turns
+			playerCombatStatusTime = 5;
+		</example>
+	</index>
+
+	<index>
+		<name>fontTable</name>
+		<type>variable</type>
+		<category>commandLine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			An array of fonts the console can cycle through.
+		</description>
+		<example>
+			fontTable[0] = "comic sans";
+			//Just kidding
+		</example>
+	</index>	
+	
+	<index>
+		<name>fontTicker</name>
+		<type>variable</type>
+		<category>commandLine</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			What font in the font table the game is currently displaying
+		</description>
+		<example>
+			//Using font comic sans
+			fontTicker = 0;
+		</example>
+	</index>
+	
+	<index>
+		<name>global</name>
+		<type>variable</type>
+		<category>system</category>
+		<arguments>none</arguments>
+		<returns>none</returns>
+		<description>
+			Holds system variables, including whether or not the game is in debug mode.
+		</description>
+		<example>
+			//Enter debug mode
+			global.debug = true;
+			
+		</example>
+	</index>
+	
+</documentation>

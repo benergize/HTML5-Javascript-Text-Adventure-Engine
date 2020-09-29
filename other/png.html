@@ -1,0 +1,162 @@
+<html>
+<head>
+</head>
+<body bgcolor=black>
+
+<canvas id = "testcanvas" width = "640px" height = "480px" style="border:1px solid #c3c3c3;">
+Your browser does not support modern HTML standards :(
+</canvas>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<script type = "text/javascript">
+	var x = 5; /*player x*/
+	var y = 190; /*player y*/
+	var xx = 310; /*ball x*/
+	var yy = 230; /*ball y*/
+	var cx = 630; /*computer x*/
+	var cy = 190; /*computer y*/
+	var speed = 0; /*paddle speed*/
+	var hspeed = 3; /*ball hspeed*/
+	var vspeed = 3; /*ball vspeed*/
+	var pscore = 0; /*player score*/
+	var cscore = 0; /*computer score*/
+	var computed = 200; //Where the paddle moves to at the begining
+	var reduxo = false; //Are we reseting? Not yet.
+	var pwin = false; //player wins
+	var cwin = false; //computer wins
+	
+	var can = document.getElementById("testcanvas"); //Make the canvas
+	var ctx = can.getContext("2d"); //Make the canvas accessible for drawing
+
+	function draw(){
+		clear();
+		ctx.fillStyle = "black";
+		ctx.fillRect(0,0,640,480);
+		ctx.fillStyle = "white";
+		ctx.fillRect(x,y,5,60); //player paddle
+		ctx.fillRect(cx,cy,5,60); //computer paddle
+		ctx.fillRect(xx,yy,10,10); //ball
+		ctx.fillRect(320,0,1,480);
+		ctx.font = "30pt Courier";
+		ctx.fillText(pscore,10,30);
+		ctx.fillText(cscore,600,30);
+		if(reduxo) { ctx.fillText("Reset",320,240); }
+		if(pwin) { ctx.fillText("Player Wins!",320,240); }
+		if(cwin) { ctx.fillText("Computer Wins!",320,240); }
+	}
+	function redux(){
+		//Winning!
+		if(pscore==10){ playerwin();  }
+		if(cscore==10){ compwin(); }
+		if(pscore!=10 && cscore!=10){
+			reduxo=true;
+			xx = 310;
+			yy = 230;
+			hspeed = 0;
+			vspeed = 0;
+			setTimeout(function(){ 
+				hspeed = Math.floor((Math.random()*3)-3); 
+				vspeed = Math.floor((Math.random()*3)-3);
+				reduxo=false;
+			},1000);
+		}
+	}
+	function playerwin(){
+		pwin=true;
+		xx = 310;
+		yy = 230;
+		hspeed = 0;
+		vspeed = 0;
+		setTimeout(function(){ 
+			hspeed = Math.floor((Math.random()*3)-3); 
+			vspeed = Math.floor((Math.random()*3)-3);
+			pscore = 0;
+			cscore = 0;
+			pwin=false;
+		},3000);
+	}
+	function compwin(){
+		cwin=true;
+		xx = 310;
+		yy = 230;
+		hspeed = 0;
+		vspeed = 0;
+		setTimeout(function(){ 
+			hspeed = Math.floor((Math.random()*3)-3); 
+			vspeed = Math.floor((Math.random()*3)-3);
+			pscore = 0;
+			cscore = 0;
+			cwin=false;
+		},3000);
+	}
+	function update(){
+		draw();
+		
+		//Move the ball
+		if(speed != 0) { y += speed; }
+		xx += hspeed;
+		yy += vspeed;
+		
+		//Player's paddle detection
+		if(xx < x+3 && xx >= x && yy >= y-3 && yy <= y+60){
+			hspeed = hspeed*-1; 
+		}
+		//Computer's paddle detection
+		if(xx >= cx-5 && xx <= cx+5 && yy >= cy-3 && yy <= cy+60){
+			hspeed = hspeed*-1; 
+		}
+		
+		//Score controls
+		if(xx >= 630) { pscore++; redux(); } //Player scores
+		if(xx <= 0) { cscore++; redux(); } //Computer scores
+	
+		if(yy >= 470) { vspeed = vspeed*-1; } //Top wall bounce	
+		if(yy <= 0) { vspeed = vspeed*-1; } //Bottom wall bounce
+		
+		//Computer Paddle Controls
+		if(xx > 320 && hspeed > 0){
+			if(yy > cy+15) { cy += 2.6; } //Paddle move down
+			if(yy < cy+15) { cy -= 2.6; } //Paddle move up
+		}
+		else{
+			if(cy > computed) { cy -= 1.6; } //Paddle return to center
+			if(cy < computed) { cy += 1.6; } //Paddle return to center				
+		}
+		
+	}
+		
+	function doKeyDown(evt){
+		switch (evt.keyCode) {
+			case 38:  /* Up arrow was pressed */
+				speed = -3;
+				break;	
+			case 40:  /* Down arrow was pressed */
+				speed = 3;
+				break;
+		}
+	}
+	function doKeyUp(evt){
+		switch (evt.keyCode) {
+			case 38:  /* Up arrow was pressed */
+				speed = 0;
+				break;
+				
+			case 40:  /* Down arrow was pressed */
+				speed = 0;
+				break;
+		}
+	}
+	function clear() {
+		ctx.clearRect(0, 0, 640, 480);
+	}
+	function compute(){
+		computed = Math.floor((Math.random()*420)+1); 
+	}
+	window.addEventListener('keyup',doKeyUp,true);
+	window.addEventListener('keydown',doKeyDown,true);
+	setInterval(update, 10);
+	setInterval(compute, 3000);
+</script>
+</body>
+</html>
